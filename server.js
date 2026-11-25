@@ -34,6 +34,15 @@ app.use('/api/presion', rutasPresion);
 app.use('/api/composicion', rutasComposicion);
 app.use('/api/subir', rutasSubir);
 
+// Manejador de errores final: si algo no capturado explota en una ruta,
+// nunca se le muestra el detalle interno (stack trace) al navegador -
+// solo se registra en la consola del servidor y se responde un mensaje
+// generico.
+app.use((err, req, res, next) => {
+  console.error('Error no manejado:', err);
+  res.status(500).json({ error: 'Ocurrio un error inesperado en el servidor.' });
+});
+
 app.listen(PUERTO, () => {
   console.log(`Health Tracker escuchando en http://localhost:${PUERTO}`);
 });
