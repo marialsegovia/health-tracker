@@ -161,3 +161,93 @@ th, td {
   font-size: 0.8rem;
   color: #52606d;
 }
+
+/* ---------------------------------------------------------------- */
+/* Paleta de visualizacion de datos (validada con el script oficial  */
+/* de la skill dataviz: CVD deltaE y contraste en PASS para light/   */
+/* dark). Ver NOTAS-DISENO si se necesita swap de marca.             */
+/* ---------------------------------------------------------------- */
+
+.viz-root {
+  color-scheme: light;
+  --viz-surface:      #fcfcfb;
+  --viz-texto:         #0b0b0b;
+  --viz-texto-sec:     #52514e;
+  --viz-texto-muted:   #898781;
+  --viz-grid:          #e1e0d9;
+  --viz-eje:           #c3c2b7;
+  --viz-serie-1:       #2a78d6; /* azul: sistolica / peso */
+  --viz-serie-2:       #eb6834; /* naranja: diastolica / % grasa */
+  --viz-serie-3:       #1baf7a; /* aqua: masa muscular */
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) .viz-root {
+    color-scheme: dark;
+    --viz-surface:      #1a1a19;
+    --viz-texto:         #ffffff;
+    --viz-texto-sec:     #c3c2b7;
+    --viz-texto-muted:   #898781;
+    --viz-grid:          #2c2c2a;
+    --viz-eje:           #383835;
+    --viz-serie-1:       #3987e5;
+    --viz-serie-2:       #d95926;
+    --viz-serie-3:       #199e70;
+  }
+}
+:root[data-theme="dark"] .viz-root {
+  color-scheme: dark;
+  --viz-surface:      #1a1a19;
+  --viz-texto:         #ffffff;
+  --viz-texto-sec:     #c3c2b7;
+  --viz-texto-muted:   #898781;
+  --viz-grid:          #2c2c2a;
+  --viz-eje:           #383835;
+  --viz-serie-1:       #3987e5;
+  --viz-serie-2:       #d95926;
+  --viz-serie-3:       #199e70;
+}
+
+.grafica-wrap { margin-bottom: 1.5rem; }
+
+.grafica-leyenda {
+  display: flex;
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--viz-texto-sec);
+}
+.grafica-leyenda .item { display: flex; align-items: center; gap: 0.4rem; }
+.grafica-leyenda .llave { width: 14px; height: 2px; border-radius: 2px; }
+
+.grafica-svg-wrap { position: relative; background: var(--viz-surface); border-radius: 8px; }
+
+.grafica-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--viz-texto);
+  color: var(--viz-surface);
+  padding: 0.5rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  transform: translate(-50%, -110%);
+  white-space: nowrap;
+  z-index: 5;
+}
+.grafica-tooltip .fila { display: flex; align-items: center; gap: 0.4rem; }
+.grafica-tooltip .llave { width: 10px; height: 2px; border-radius: 2px; display: inline-block; }
+.grafica-tooltip .valor { font-weight: 700; margin-left: auto; }
+
+.grafica-toggle-tabla {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  font-weight: 600;
+}
+
+.grafica-tabla { margin-top: 0.5rem; font-size: 0.8rem; }
+.grafica-tabla td, .grafica-tabla th { font-variant-numeric: tabular-nums; }

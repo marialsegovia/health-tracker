@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historial - Health Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav id="nav-contenedor"></nav>
+
+  <main>
+    <h1>Historial</h1>
+    <p>Aqui puedes corregir o eliminar cualquier registro guardado.</p>
+
+    <section class="tarjeta">
+      <h2>Presion arterial</h2>
+      <div id="tabla-presion"></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Composicion corporal</h2>
+      <div id="tabla-composicion"></div>
+    </section>
+  </main>
+
+  <script src="/nav.js"></script>
+  <script src="/historial.js"></script>
+  <script>dibujarNav('historial');</script>
+</body>
+</html>

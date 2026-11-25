@@ -1,5 +1,36 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><title>Health Tracker</title></head>
-<body><h1>Health Tracker (en construccion)</h1></body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav id="nav-contenedor"></nav>
+
+  <main class="viz-root">
+    <h1>Resumen</h1>
+    <p style="color:var(--viz-texto-sec);">
+      Visualizador local de tu evolucion de salud. No da consejos ni
+      interpretaciones medicas - solo organiza y grafica lo que tu subes.
+    </p>
+
+    <div class="estadisticas" id="zona-resumen"></div>
+
+    <section class="tarjeta">
+      <h2>Que puedes hacer</h2>
+      <ul>
+        <li><a href="/subir.html">Subir un documento</a> (CSV, PDF o foto) de presion arterial o composicion corporal.</li>
+        <li><a href="/presion.html">Ver la tendencia de presion arterial.</a></li>
+        <li><a href="/composicion.html">Ver la tendencia de composicion corporal.</a></li>
+        <li><a href="/historial.html">Revisar o corregir registros guardados.</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="/nav.js"></script>
+  <script src="/index.js"></script>
+  <script>dibujarNav('index');</script>
+</body>
 </html>

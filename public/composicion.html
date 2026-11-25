@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Composicion corporal - Health Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav id="nav-contenedor"></nav>
+
+  <main class="viz-root">
+    <h1>Composicion corporal</h1>
+    <p style="color:var(--viz-texto-sec);">
+      Cada medida tiene su propia unidad, asi que se muestra en su propia
+      grafica (kilogramos y porcentaje no van juntos en el mismo eje).
+    </p>
+
+    <div class="estadisticas" id="zona-estadisticas"></div>
+
+    <section class="tarjeta">
+      <h2>Peso (kg)</h2>
+      <div id="grafica-peso"></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Grasa corporal (%)</h2>
+      <div id="grafica-grasa"></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Masa muscular (kg)</h2>
+      <div id="grafica-musculo"></div>
+    </section>
+  </main>
+
+  <script src="/nav.js"></script>
+  <script src="/grafica-lineas.js"></script>
+  <script src="/composicion.js"></script>
+  <script>dibujarNav('composicion');</script>
+</body>
+</html>

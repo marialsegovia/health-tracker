@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presion arterial - Health Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav id="nav-contenedor"></nav>
+
+  <main class="viz-root">
+    <h1>Presion arterial</h1>
+    <p style="color:var(--viz-texto-sec);">
+      Evolucion de tus propias lecturas en el tiempo. Esta pagina no incluye
+      ninguna linea de referencia clinica ni interpretacion medica - solo
+      visualiza los numeros que tu has registrado.
+    </p>
+
+    <div class="estadisticas" id="zona-estadisticas"></div>
+
+    <section class="tarjeta">
+      <h2>Sistolica / Diastolica (mmHg)</h2>
+      <div id="grafica-presion"></div>
+    </section>
+  </main>
+
+  <script src="/nav.js"></script>
+  <script src="/grafica-lineas.js"></script>
+  <script src="/presion.js"></script>
+  <script>dibujarNav('presion');</script>
+</body>
+</html>
