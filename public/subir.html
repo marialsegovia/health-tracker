@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subir documento - Health Tracker</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav id="nav-contenedor"></nav>
+
+  <main>
+    <h1>Subir documento</h1>
+    <p>Sube un CSV, PDF o foto. La IA (o el lector de CSV) propone los
+      valores extraidos; tu los revisas y corriges antes de guardarlos.</p>
+
+    <section class="tarjeta">
+      <form id="formulario-subir">
+        <div class="fila-formulario">
+          <div class="campo">
+            <label for="campo-tipo">Tipo de dato</label>
+            <select id="campo-tipo" required>
+              <option value="presion">Presion arterial</option>
+              <option value="composicion">Composicion corporal</option>
+            </select>
+          </div>
+          <div class="campo">
+            <label for="campo-archivo">Archivo (CSV, PDF, JPG o PNG)</label>
+            <input type="file" id="campo-archivo" accept=".csv,.pdf,.jpg,.jpeg,.png" required />
+          </div>
+          <button type="submit" id="boton-subir">Analizar archivo</button>
+        </div>
+      </form>
+    </section>
+
+    <div id="zona-mensajes"></div>
+    <div id="zona-resultado"></div>
+  </main>
+
+  <script src="/nav.js"></script>
+  <script src="/subir.js"></script>
+  <script>dibujarNav('subir');</script>
+</body>
+</html>

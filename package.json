@@ -11,7 +11,7 @@
     "test:extraction": "node scripts/mock-extraction-test.js"
   },
   "dependencies": {
-    "better-sqlite3": "^11.9.1",
+    "better-sqlite3": "^13.2.0",
     "csv-parse": "^7.0.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
