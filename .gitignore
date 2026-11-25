@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+npm-debug.log*
+
+# Datos reales del usuario: nunca se suben al repositorio publico.
+data/*.db
+uploads/*
+
+# Clave de API y otros secretos locales.
+.env
