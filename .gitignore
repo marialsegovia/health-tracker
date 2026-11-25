@@ -3,7 +3,10 @@ node_modules/
 npm-debug.log*
 
 # Datos reales del usuario: nunca se suben al repositorio publico.
-data/*.db
+# El patron cubre health.db, health.db-wal y health.db-shm (SQLite en
+# modo WAL genera estos tres archivos, y los dos ultimos NO terminan en
+# ".db" asi que un patron "*.db" simple no los habria excluido).
+data/health.db*
 uploads/*
 
 # Clave de API y otros secretos locales.
