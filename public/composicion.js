@@ -29,35 +29,45 @@ async function cargarPaginaComposicion() {
   );
 }
 
+// createElement + textContent (nunca innerHTML con datos del usuario/base
+// de datos): un valor malicioso guardado en un registro no debe poder
+// inyectar HTML/JS en esta pagina.
+function crearTarjetaEstadistica(etiqueta, valor) {
+  const div = document.createElement('div');
+  div.className = 'estadistica';
+  const elEtiqueta = document.createElement('div');
+  elEtiqueta.className = 'etiqueta';
+  elEtiqueta.textContent = etiqueta;
+  const elValor = document.createElement('div');
+  elValor.className = 'valor';
+  elValor.textContent = valor;
+  div.append(elEtiqueta, elValor);
+  return div;
+}
+
 function dibujarEstadisticasComposicion(mediciones) {
   const zona = document.getElementById('zona-estadisticas');
+  zona.innerHTML = '';
 
   if (mediciones.length === 0) {
-    zona.innerHTML = '<p>Aun no tienes mediciones guardadas. <a href="/subir.html">Sube tu primer documento</a>.</p>';
+    const vacio = document.createElement('p');
+    const enlace = document.createElement('a');
+    enlace.href = '/subir.html';
+    enlace.textContent = 'Sube tu primer documento';
+    vacio.append('Aun no tienes mediciones guardadas. ', enlace, '.');
+    zona.appendChild(vacio);
     return;
   }
 
   const ordenadas = [...mediciones].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
   const ultima = ordenadas[ordenadas.length - 1];
 
-  zona.innerHTML = `
-    <div class="estadistica">
-      <div class="etiqueta">Ultima medicion (${ultima.fecha})</div>
-      <div class="valor">${ultima.peso ?? '-'} kg</div>
-    </div>
-    <div class="estadistica">
-      <div class="etiqueta">% Grasa</div>
-      <div class="valor">${ultima.porcentaje_grasa ?? '-'}</div>
-    </div>
-    <div class="estadistica">
-      <div class="etiqueta">Masa muscular</div>
-      <div class="valor">${ultima.masa_muscular ?? '-'} kg</div>
-    </div>
-    <div class="estadistica">
-      <div class="etiqueta">Mediciones registradas</div>
-      <div class="valor">${mediciones.length}</div>
-    </div>
-  `;
+  zona.append(
+    crearTarjetaEstadistica(`Ultima medicion (${ultima.fecha})`, `${ultima.peso ?? '-'} kg`),
+    crearTarjetaEstadistica('% Grasa', `${ultima.porcentaje_grasa ?? '-'}`),
+    crearTarjetaEstadistica('Masa muscular', `${ultima.masa_muscular ?? '-'} kg`),
+    crearTarjetaEstadistica('Mediciones registradas', mediciones.length.toString())
+  );
 }
 
 cargarPaginaComposicion();

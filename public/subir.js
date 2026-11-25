@@ -84,49 +84,98 @@ formulario.addEventListener('submit', async (evento) => {
   }
 });
 
+// Toda esta funcion construye el DOM con createElement/textContent y la
+// propiedad .value (nunca innerHTML con texto interpolado). Los valores de
+// "registro" vienen de un CSV o de lo que Claude transcribio de un PDF/foto
+// - texto que no controlamos - asi que nunca se insertan como HTML, solo
+// como texto o como el valor real de un input.
 function dibujarTablaResultado(tipo, registros, advertencias, nombreArchivo) {
+  zonaResultado.innerHTML = '';
+
   if (registros.length === 0) {
-    zonaResultado.innerHTML = '<p>No se encontraron registros en este archivo.</p>';
+    const vacio = document.createElement('p');
+    vacio.textContent = 'No se encontraron registros en este archivo.';
+    zonaResultado.appendChild(vacio);
+    return;
   }
 
   const columnas = COLUMNAS[tipo];
 
-  const filasHtml = registros
-    .map((registro, indice) => {
-      const celdas = columnas
-        .map((columna) => {
-          const valor = registro[columna.clave] ?? '';
-          const tipoInput = columna.clave === 'fecha' ? 'date' : CAMPOS_NUMERICOS.has(columna.clave) ? 'number' : 'text';
-          return `<td><input type="${tipoInput}" step="any" data-fila="${indice}" data-campo="${columna.clave}" value="${valor}" /></td>`;
-        })
-        .join('');
-      return `<tr><td><input type="checkbox" class="check-fila" data-fila="${indice}" checked /></td>${celdas}</tr>`;
-    })
-    .join('');
+  if (advertencias.length > 0) {
+    const divAdvertencias = document.createElement('div');
+    divAdvertencias.className = 'advertencias';
+    const titulo = document.createElement('strong');
+    titulo.textContent = 'Revisa antes de guardar:';
+    const lista = document.createElement('ul');
+    advertencias.forEach((texto) => {
+      const li = document.createElement('li');
+      li.textContent = texto;
+      lista.appendChild(li);
+    });
+    divAdvertencias.append(titulo, lista);
+    zonaResultado.appendChild(divAdvertencias);
+  }
 
-  const encabezados = columnas.map((c) => `<th>${c.etiqueta}</th>`).join('');
-  const advertenciasHtml = advertencias.length
-    ? `<div class="advertencias"><strong>Revisa antes de guardar:</strong><ul>${advertencias
-        .map((a) => `<li>${a}</li>`)
-        .join('')}</ul></div>`
-    : '';
+  const tarjeta = document.createElement('div');
+  tarjeta.className = 'tarjeta';
 
-  zonaResultado.innerHTML = `
-    ${advertenciasHtml}
-    <div class="tarjeta">
-      <table>
-        <thead><tr><th></th>${encabezados}</tr></thead>
-        <tbody id="cuerpo-tabla">${filasHtml}</tbody>
-      </table>
-      <div style="margin-top:1rem;">
-        <button id="boton-guardar">Guardar filas marcadas</button>
-      </div>
-    </div>
-  `;
+  const tabla = document.createElement('table');
+  const thead = document.createElement('thead');
+  const filaEncabezado = document.createElement('tr');
+  filaEncabezado.appendChild(document.createElement('th')); // columna del checkbox
+  columnas.forEach((columna) => {
+    const th = document.createElement('th');
+    th.textContent = columna.etiqueta;
+    filaEncabezado.appendChild(th);
+  });
+  thead.appendChild(filaEncabezado);
+  tabla.appendChild(thead);
 
-  document.getElementById('boton-guardar').addEventListener('click', () => {
+  const tbody = document.createElement('tbody');
+  tbody.id = 'cuerpo-tabla';
+
+  registros.forEach((registro, indice) => {
+    const fila = document.createElement('tr');
+
+    const tdCheckbox = document.createElement('td');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'check-fila';
+    checkbox.dataset.fila = indice;
+    checkbox.checked = true;
+    tdCheckbox.appendChild(checkbox);
+    fila.appendChild(tdCheckbox);
+
+    columnas.forEach((columna) => {
+      const td = document.createElement('td');
+      const input = document.createElement('input');
+      input.type = columna.clave === 'fecha' ? 'date' : CAMPOS_NUMERICOS.has(columna.clave) ? 'number' : 'text';
+      if (input.type === 'number') input.step = 'any';
+      input.dataset.fila = indice;
+      input.dataset.campo = columna.clave;
+      input.value = registro[columna.clave] ?? ''; // propiedad .value, nunca el atributo HTML
+      td.appendChild(input);
+      fila.appendChild(td);
+    });
+
+    tbody.appendChild(fila);
+  });
+
+  tabla.appendChild(tbody);
+  tarjeta.appendChild(tabla);
+
+  const divBoton = document.createElement('div');
+  divBoton.style.marginTop = '1rem';
+  const botonGuardar = document.createElement('button');
+  botonGuardar.id = 'boton-guardar';
+  botonGuardar.textContent = 'Guardar filas marcadas';
+  botonGuardar.addEventListener('click', () => {
     guardarFilasMarcadas(tipo, registros.length, nombreArchivo);
   });
+  divBoton.appendChild(botonGuardar);
+  tarjeta.appendChild(divBoton);
+
+  zonaResultado.appendChild(tarjeta);
 }
 
 async function guardarFilasMarcadas(tipo, totalFilas, nombreArchivo) {

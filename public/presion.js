@@ -30,11 +30,34 @@ async function cargarPaginaPresion() {
   );
 }
 
+// Construye una tarjeta de estadistica usando createElement + textContent
+// (nunca innerHTML con datos del usuario/base de datos) para que un valor
+// malicioso guardado en un registro (ej. via un CSV o una correccion en el
+// historial) no pueda inyectar HTML/JS en esta pagina.
+function crearTarjetaEstadistica(etiqueta, valor) {
+  const div = document.createElement('div');
+  div.className = 'estadistica';
+  const elEtiqueta = document.createElement('div');
+  elEtiqueta.className = 'etiqueta';
+  elEtiqueta.textContent = etiqueta;
+  const elValor = document.createElement('div');
+  elValor.className = 'valor';
+  elValor.textContent = valor;
+  div.append(elEtiqueta, elValor);
+  return div;
+}
+
 function dibujarEstadisticasPresion(lecturas) {
   const zona = document.getElementById('zona-estadisticas');
+  zona.innerHTML = '';
 
   if (lecturas.length === 0) {
-    zona.innerHTML = '<p>Aun no tienes lecturas guardadas. <a href="/subir.html">Sube tu primer documento</a>.</p>';
+    const vacio = document.createElement('p');
+    const enlace = document.createElement('a');
+    enlace.href = '/subir.html';
+    enlace.textContent = 'Sube tu primer documento';
+    vacio.append('Aun no tienes lecturas guardadas. ', enlace, '.');
+    zona.appendChild(vacio);
     return;
   }
 
@@ -43,24 +66,12 @@ function dibujarEstadisticasPresion(lecturas) {
   const promedioSistolica = promedio(ordenadas.map((l) => l.sistolica));
   const promedioDiastolica = promedio(ordenadas.map((l) => l.diastolica));
 
-  zona.innerHTML = `
-    <div class="estadistica">
-      <div class="etiqueta">Ultima lectura (${ultima.fecha})</div>
-      <div class="valor">${ultima.sistolica}/${ultima.diastolica}</div>
-    </div>
-    <div class="estadistica">
-      <div class="etiqueta">Promedio sistolica</div>
-      <div class="valor">${promedioSistolica.toFixed(0)}</div>
-    </div>
-    <div class="estadistica">
-      <div class="etiqueta">Promedio diastolica</div>
-      <div class="valor">${promedioDiastolica.toFixed(0)}</div>
-    </div>
-    <div class="estadistica">
-      <div class="etiqueta">Lecturas registradas</div>
-      <div class="valor">${lecturas.length}</div>
-    </div>
-  `;
+  zona.append(
+    crearTarjetaEstadistica(`Ultima lectura (${ultima.fecha})`, `${ultima.sistolica}/${ultima.diastolica}`),
+    crearTarjetaEstadistica('Promedio sistolica', promedioSistolica.toFixed(0)),
+    crearTarjetaEstadistica('Promedio diastolica', promedioDiastolica.toFixed(0)),
+    crearTarjetaEstadistica('Lecturas registradas', lecturas.length.toString())
+  );
 }
 
 function promedio(numeros) {
